@@ -54,7 +54,7 @@ class SqlExportCommandTest extends TestCase
             'port'     => env('DB_PORT', '55322'),
             'database' => env('DB_DATABASE', 'db_test'),
             'username' => env('DB_USERNAME', 'postgres'),
-            'password' => env('DB_PASSWORD', 'postgres'),
+            'password' => env('DB_PASSWORD', 'password'),
         ]);
     }
 
