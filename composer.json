@@ -10,18 +10,17 @@
   "license": "EUPL",
   "authors": [
     {
-      "name": "Gerbrand Bosch",
-      "email": "gerbrandb@gmail.com"
+      "name": "Ministerie van Volksgezondheid, Welzijn en Sport"
     }
   ],
   "require": {
     "php": "^8.2",
-    "laravel/framework": "^10.17",
+    "laravel/framework": "^8|^9|^10",
     "nesbot/carbon": "^2.66"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.5",
-    "orchestra/testbench": "^8.15"
+    "orchestra/testbench": "^6.0|^7.0|^8.0"
   },
   "autoload": {
     "psr-4": {
