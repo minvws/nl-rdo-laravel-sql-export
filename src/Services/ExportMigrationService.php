@@ -24,8 +24,7 @@ class ExportMigrationService extends Migrator
         private readonly string $outputMigrationName,
         private readonly string $laravelMigrationsPath,
         private readonly string $sqlMigrationsPath
-    )
-    {
+    ) {
         parent::__construct($repository, $resolver, $files, $dispatcher);
     }
 
