@@ -16,7 +16,7 @@ class ExportCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'sql-export {outputMigrationName} {laravelMigrationsPath?} {sqlMigrationsPath?}';
+    protected $signature = 'sql-export {outputMigrationName} {--laravelMigrationsPath=} {--sqlMigrationsPath=}';
 
     /**
      * The console command description.
@@ -36,9 +36,9 @@ class ExportCommand extends Command
 
         $outputMigrationNameArgument = $this->argument('outputMigrationName');
         assert(is_string($outputMigrationNameArgument));
-        $laravelMigrationsPathArgument = $this->argument('laravelMigrationsPath');
+        $laravelMigrationsPathArgument = $this->option('laravelMigrationsPath');
         assert(is_null($laravelMigrationsPathArgument) || is_string($laravelMigrationsPathArgument));
-        $sqlMigrationsPathArgument = $this->argument('sqlMigrationsPath');
+        $sqlMigrationsPathArgument = $this->option('sqlMigrationsPath');
         assert(is_null($sqlMigrationsPathArgument) || is_string($sqlMigrationsPathArgument));
 
         $app->singleton('exportMigrationService', function ($app) use (

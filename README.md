@@ -17,7 +17,7 @@ composer require minvws/laravel-sql-exporter
 After installing the package, you can run the following command to export your migrations to a sql file:
 
 ```bash
- vendor/bin/sail artisan sql-export
+ vendor/bin/sail artisan sql-export migration_description
 ```
 
 By default, the laravel migrations are read from the `database/migrations` folder of the working directory.
@@ -27,7 +27,9 @@ You can specify the laravel migrations and the output location by adding
 the `laravelMigrationsPath` or the `sqlMigrationsPath` arguments:
 
 ```bash
- vendor/bin/sail artisan sql-export --laravelMigrationsPath=/path/to/laravel/migrations --sqlMigrationsPath=/path/to/sql/migrations
+ vendor/bin/sail artisan sql-export migration_description \
+ --laravelMigrationsPath=/path/to/laravel/migrations \
+ --sqlMigrationsPath=/path/to/sql/migrations
 ```
 
 ## Development

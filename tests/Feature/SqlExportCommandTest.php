@@ -67,8 +67,8 @@ class SqlExportCommandTest extends TestCase
         $this->artisan('sql-export', [
             // Pass any command options or arguments here
             'outputMigrationName' => 'first_migration',
-            'laravelMigrationsPath' => $this->laravelMigrationsPath,
-            'sqlMigrationsPath' => $this->sqlMigrationsPath,
+            '--laravelMigrationsPath' => $this->laravelMigrationsPath,
+            '--sqlMigrationsPath' => $this->sqlMigrationsPath,
         ])->assertExitCode(0);
 
         $outputMigrations = scandir($this->sqlMigrationsPath);
@@ -93,8 +93,8 @@ class SqlExportCommandTest extends TestCase
         );
         $this->artisan('sql-export', [
             'outputMigrationName' => 'first_migration',
-            'laravelMigrationsPath' => $this->laravelMigrationsPath,
-            'sqlMigrationsPath' => $this->sqlMigrationsPath,
+            '--laravelMigrationsPath' => $this->laravelMigrationsPath,
+            '--sqlMigrationsPath' => $this->sqlMigrationsPath,
         ])->assertExitCode(0);
 
         Carbon::setTestNow(Carbon::create(2024, 11, 28, 15, 8, 59));
@@ -109,8 +109,8 @@ class SqlExportCommandTest extends TestCase
         );
         $this->artisan('sql-export', [
             'outputMigrationName' => 'second_migration',
-            'laravelMigrationsPath' => $this->laravelMigrationsPath,
-            'sqlMigrationsPath' => $this->sqlMigrationsPath,
+            '--laravelMigrationsPath' => $this->laravelMigrationsPath,
+            '--sqlMigrationsPath' => $this->sqlMigrationsPath,
         ])->assertExitCode(0);
 
         $outputMigrations = scandir($this->sqlMigrationsPath);
