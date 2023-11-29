@@ -1,5 +1,5 @@
 {
-  "name": "minvws/sql-exporter",
+  "name": "minvws/laravel-sql-exporter",
   "description": "Generic audit logger",
   "keywords": [
     "laravel",
