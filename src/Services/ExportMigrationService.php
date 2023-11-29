@@ -13,6 +13,7 @@ use Illuminate\Database\Migrations\MigrationRepositoryInterface;
 use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\DB;
+
 class ExportMigrationService extends Migrator
 {
     public function __construct(
@@ -24,7 +25,6 @@ class ExportMigrationService extends Migrator
         private readonly string $laravelMigrationsPath,
         private readonly string $sqlMigrationsPath
     )
-        
     {
         parent::__construct($repository, $resolver, $files, $dispatcher);
     }
@@ -51,16 +51,25 @@ class ExportMigrationService extends Migrator
 
         $this->writeMigrationsFile($this->outputMigrationName, $queries);
 
-        $this->updateCurrentMigrationFile(end($files));
+        if (!empty($files)) {
+            $this->updateCurrentMigrationFile(end($files));
+        }
     }
 
+    /**
+     * @return string[]
+     */
     protected function getMigrationFilesAfterCurrentMigration(): array
     {
         $files = scandir($this->laravelMigrationsPath, SCANDIR_SORT_ASCENDING);
+        if (!is_array($files)) {
+            return [];
+        }
 
         $currentMigration = '';
         if (file_exists($this->laravelMigrationsPath . '/current_migration.txt')) {
              $currentMigration = file_get_contents("{$this->laravelMigrationsPath}/current_migration.txt");
+             assert(is_string($currentMigration));
         }
 
         return array_filter($files, function ($file) use ($currentMigration) {
@@ -68,9 +77,12 @@ class ExportMigrationService extends Migrator
         });
     }
 
+    /**
+     * @param string[] $files
+     */
     protected function runDownMigrationsUntilCurrentMigration(array $files): void
     {
-        if(!$this->repository->repositoryExists()) {
+        if (!$this->repository->repositoryExists()) {
             return;
         }
         foreach (array_reverse($files) as $file) {
@@ -88,9 +100,12 @@ class ExportMigrationService extends Migrator
         }
     }
 
+    /**
+     * @param string[] $files
+     */
     protected function runUpMigrations(array $files): void
     {
-        if(!$this->repository->repositoryExists()) {
+        if (!$this->repository->repositoryExists()) {
             $this->repository->createRepository();
         }
         $nextBatchNumber = $this->repository->getNextBatchNumber();
@@ -103,6 +118,10 @@ class ExportMigrationService extends Migrator
         }
     }
 
+    /**
+     * @param array{raw_query:string}[] $queries
+     * @return array{raw_query:string}[]
+     */
     protected function filterOutMigrationQueries(array $queries): array
     {
         $queriesToIgnore = [
@@ -124,16 +143,19 @@ class ExportMigrationService extends Migrator
     }
 
     /**
+     * @param string $outputFileName
+     * @param array{raw_query:string}[] $queries
+     *
      * @throws \Exception
      */
     protected function writeMigrationsFile(string $outputFileName, array $queries): void
     {
         $dateString = Carbon::now()->format('Y_m_d_His');
         $filePath = "{$this->sqlMigrationsPath}/{$dateString}_{$outputFileName}";
-        if(!file_exists($this->sqlMigrationsPath)) {
+        if (!file_exists($this->sqlMigrationsPath)) {
             mkdir($this->sqlMigrationsPath, recursive: true);
         }
-        if(!file_exists($filePath)) {
+        if (!file_exists($filePath)) {
             touch($filePath);
         }
         $migrationFile = fopen($filePath, 'w');

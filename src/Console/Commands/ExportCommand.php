@@ -26,26 +26,27 @@ class ExportCommand extends Command
     protected $description = 'Generate sql output for the laravel migrations';
 
     /**
+     * @param Application $app
+     *
      * @throws BindingResolutionException
      */
     public function handle(Application $app): void
     {
         $working_dir = getcwd();
 
-        $outputMigrationName = $this->argument('outputMigrationName') . '.sql';
+        $outputMigrationNameArgument = $this->argument('outputMigrationName');
+        assert(is_string($outputMigrationNameArgument));
+        $laravelMigrationsPathArgument = $this->argument('laravelMigrationsPath');
+        assert(is_null($laravelMigrationsPathArgument) || is_string($laravelMigrationsPathArgument));
+        $sqlMigrationsPathArgument = $this->argument('sqlMigrationsPath');
+        assert(is_null($sqlMigrationsPathArgument) || is_string($sqlMigrationsPathArgument));
 
-        $laravelMigrationsPath = $working_dir . '/database/migrations';
-        if ($this->argument('laravelMigrationsPath')) {
-            $laravelMigrationsPath = $this->argument('laravelMigrationsPath');
-        }
-
-        $sqlMigrationsPath = $working_dir . '/database/sql';
-        if ($this->argument('sqlMigrationsPath')) {
-            $sqlMigrationsPath = $this->argument('sqlMigrationsPath');
-        }
-
-        $app->singleton('exportMigrationService', function ($app)
-            use ($outputMigrationName, $laravelMigrationsPath, $sqlMigrationsPath){
+        $app->singleton('exportMigrationService', function ($app) use (
+            $outputMigrationNameArgument,
+            $laravelMigrationsPathArgument,
+            $sqlMigrationsPathArgument,
+            $working_dir
+        ) {
             $repository = $app['migration.repository'];
 
             return new ExportMigrationService(
@@ -53,9 +54,9 @@ class ExportCommand extends Command
                 $app['db'],
                 $app['files'],
                 $app['events'],
-                $outputMigrationName,
-                $laravelMigrationsPath,
-                $sqlMigrationsPath
+                $outputMigrationNameArgument . '.sql',
+                $laravelMigrationsPathArgument ?? $working_dir . '/database/migrations',
+                $sqlMigrationsPathArgument ?? $working_dir . '/database/sql',
             );
         });
 
