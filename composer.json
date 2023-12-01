@@ -52,5 +52,12 @@
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true
     }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        " MinVWS\\SqlExporter\\SqlExporterServiceProvider"
+      ]
+    }
   }
 }
