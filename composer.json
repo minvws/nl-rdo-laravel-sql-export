@@ -56,7 +56,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        " MinVWS\\SqlExporter\\SqlExporterServiceProvider"
+        "MinVWS\\SqlExporter\\SqlExporterServiceProvider"
       ]
     }
   }
