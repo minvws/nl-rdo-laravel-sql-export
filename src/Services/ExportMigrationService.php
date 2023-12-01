@@ -34,13 +34,12 @@ class ExportMigrationService extends Migrator
     public function migrateToOutputFile(): void
     {
         $files = $this->getMigrationFilesAfterCurrentMigration();
-
         $this->runDownMigrationsUntilCurrentMigration($files);
 
+        DB::connection()->flushQueryLog();
         DB::connection()->enableQueryLog();
 
         $this->runUpMigrations($files);
-
         $queries = $this->filterOutMigrationQueries(DB::getRawQueryLog());
 
         if (empty($queries)) {
@@ -64,13 +63,11 @@ class ExportMigrationService extends Migrator
         if (!is_array($files)) {
             return [];
         }
-
         $currentMigration = '';
         if (file_exists($this->laravelMigrationsPath . '/current_migration.txt')) {
-             $currentMigration = file_get_contents("{$this->laravelMigrationsPath}/current_migration.txt");
-             assert(is_string($currentMigration));
+            $currentMigration = file_get_contents("{$this->laravelMigrationsPath}/current_migration.txt");
+            assert(is_string($currentMigration));
         }
-
         return array_filter($files, function ($file) use ($currentMigration) {
             return str_ends_with($file, '.php') && strcasecmp($file, $currentMigration) > 0;
         });
@@ -88,11 +85,9 @@ class ExportMigrationService extends Migrator
             $lastRunMigrations = $this->repository->getLast();
             $lastRunMigration = reset($lastRunMigrations);
             $migration = $this->resolvePath($this->laravelMigrationsPath . '/' . $file);
-
             if (!$lastRunMigration || $lastRunMigration->migration != substr($file, 0, -4)) {
-                return;
+                continue;
             }
-
             $this->runMigration($migration, 'down');
             $this->repository->delete($lastRunMigration);
             $this->write(Info::class, "downed {$file}");
@@ -108,7 +103,6 @@ class ExportMigrationService extends Migrator
             $this->repository->createRepository();
         }
         $nextBatchNumber = $this->repository->getNextBatchNumber();
-
         foreach ($files as $file) {
             $migrationPath = $this->laravelMigrationsPath . '/' . $file;
             $this->runMigration($this->resolvePath($migrationPath), 'up');

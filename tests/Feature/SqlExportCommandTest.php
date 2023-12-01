@@ -125,4 +125,44 @@ class SqlExportCommandTest extends TestCase
             file_get_contents($this->laravelMigrationsPath . '/current_migration.txt'),
         );
     }
+
+    public function testSqlExportCommandWhenFirstMigrationsButWithoutCurrentMigrationFile()
+    {
+        Carbon::setTestNow(Carbon::create(2023, 11, 28, 15, 8, 59));
+        copy(
+            'tests/fixtures/database/migrations/2023_09_06_150000_laravel_test_first_migration.php',
+            $this->laravelMigrationsPath . '/2023_09_06_150000_laravel_test_first_migration.php'
+        );
+        $this->artisan('sql-export', [
+            'outputMigrationName' => 'first_migration',
+            '--laravelMigrationsPath' => $this->laravelMigrationsPath,
+            '--sqlMigrationsPath' => $this->sqlMigrationsPath,
+        ])->assertExitCode(0);
+
+        Carbon::setTestNow(Carbon::create(2024, 11, 28, 15, 8, 59));
+        unlink($this->laravelMigrationsPath . '/current_migration.txt');
+        unlink($this->sqlMigrationsPath . '/2023_11_28_150859_first_migration.sql');
+        copy(
+            'tests/fixtures/database/migrations/2024_09_06_150000_laravel_test_second_migration.php',
+            $this->laravelMigrationsPath . '/2024_09_06_150000_laravel_test_second_migration.php'
+        );
+        $this->artisan('sql-export', [
+            'outputMigrationName' => 'all_migration',
+            '--laravelMigrationsPath' => $this->laravelMigrationsPath,
+            '--sqlMigrationsPath' => $this->sqlMigrationsPath,
+        ])->assertExitCode(0);
+
+        $outputMigrations = scandir($this->sqlMigrationsPath);
+        $this->assertCount(3, $outputMigrations);
+        $this->assertEquals('2024_11_28_150859_all_migration.sql', $outputMigrations[2]);
+        $this->assertEquals(
+            file_get_contents('tests/fixtures/database/sql/2024_11_28_150859_all_migration.sql'),
+            file_get_contents($this->sqlMigrationsPath . '/2024_11_28_150859_all_migration.sql')
+        );
+        $this->assertEquals(
+            '2024_09_06_150000_laravel_test_second_migration.php',
+            file_get_contents($this->laravelMigrationsPath . '/current_migration.txt'),
+        );
+    }
+
 }
