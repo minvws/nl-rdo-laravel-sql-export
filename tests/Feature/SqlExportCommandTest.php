@@ -164,5 +164,4 @@ class SqlExportCommandTest extends TestCase
             file_get_contents($this->laravelMigrationsPath . '/current_migration.txt'),
         );
     }
-
 }
