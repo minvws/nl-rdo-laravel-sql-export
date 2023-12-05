@@ -1,0 +1,6 @@
+parameters:
+    paths:
+        - src
+    level: 8
+includes:
+    - phar://phpstan.phar/conf/bleedingEdge.neon
