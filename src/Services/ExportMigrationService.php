@@ -54,10 +54,10 @@ class ExportMigrationService extends Migrator
             return;
         }
 
-        assert(
-            !empty($this->outputMigrationName),
-            "The outputMigrationName should be set as a command line argument"
-        );
+        if (empty($this->outputMigrationName)) {
+            $this->write(Error::class, "The outputMigrationName should be set as a command line argument.");
+            return;
+        }
         $this->writeMigrationsFile($this->outputMigrationName, $queries);
 
         if (!empty($files)) {
