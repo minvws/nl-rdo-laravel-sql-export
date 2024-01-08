@@ -9,7 +9,7 @@ return [
     'laravel_migrations_path' => env('SQL_EXPORT_LARAVEL_MIGRATIONS_PATH', getcwd() . '/database/migrations'),
 
     /**
-     * If needed, the client secret of the OpenID Connect provider.
+     * The export tool exports the Laravel migrations to SQL migration in this directory.
      */
     'sql_migrations_path' => env('SQL_EXPORT_SQL_MIGRATIONS_PATH', getcwd() . '/database/sql'),
 ];
