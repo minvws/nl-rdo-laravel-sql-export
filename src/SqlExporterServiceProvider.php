@@ -12,7 +12,7 @@ class SqlExporterServiceProvider extends ServiceProvider
 
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/sqlExport.php', 'sqlExport');
+        $this->mergeConfigFrom(__DIR__ . '/../config/sql-export.php', 'sqlExport');
 
         $this->app->singleton(ExportMigrationService::class, function ($app) {
             $repository = $app['migration.repository'];
@@ -22,8 +22,8 @@ class SqlExporterServiceProvider extends ServiceProvider
                 $app['db'],
                 $app['files'],
                 $app['events'],
-                config('sqlExport.laravelMigrationsPath'),
-                config('sqlExport.sqlMigrationsPath'),
+                config('sql-export.laravelMigrationsPath'),
+                config('sql-export.sqlMigrationsPath'),
             );
         });
     }

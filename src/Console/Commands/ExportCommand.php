@@ -6,8 +6,6 @@ namespace MinVWS\SqlExporter\Console\Commands;
 
 use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Contracts\Foundation\Application;
 use MinVWS\SqlExporter\Services\ExportMigrationService;
 
 class ExportCommand extends Command
