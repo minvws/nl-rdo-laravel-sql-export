@@ -40,10 +40,6 @@ class ExportMigrationService extends Migrator
      */
     public function migrateToOutputFile(): void
     {
-        assert(
-            !empty($this->outputMigrationName),
-            "The outputMigrationName should be set as a command line argument"
-        );
         $files = $this->getMigrationFilesAfterCurrentMigration();
         $this->runDownMigrationsUntilCurrentMigration($files);
 
@@ -58,6 +54,10 @@ class ExportMigrationService extends Migrator
             return;
         }
 
+        assert(
+            !empty($this->outputMigrationName),
+            "The outputMigrationName should be set as a command line argument"
+        );
         $this->writeMigrationsFile($this->outputMigrationName, $queries);
 
         if (!empty($files)) {
