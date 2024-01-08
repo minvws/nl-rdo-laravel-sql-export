@@ -11,10 +11,10 @@ return [
     /**
      * The client ID of the OpenID Connect provider.
      */
-    'laravelMigrationsPath' => env('LARAVEL_MIGRATIONS_PATH', getcwd() . '/database/migrations'),
+    'laravelMigrationsPath' => env('SQL_EXPORT_LARAVEL_MIGRATIONS_PATH', getcwd() . '/database/migrations'),
 
     /**
      * If needed, the client secret of the OpenID Connect provider.
      */
-    'sqlMigrationsPath' => env('SQL_MIGRATIONS_PATH', getcwd() . '/database/sql'),
+    'sqlMigrationsPath' => env('SQL_EXPORT_SQL_MIGRATIONS_PATH', getcwd() . '/database/sql'),
 ];
