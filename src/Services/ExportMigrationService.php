@@ -16,16 +16,23 @@ use Illuminate\Support\Facades\DB;
 
 class ExportMigrationService extends Migrator
 {
+    private string|null $outputMigrationName = null;
+
+    private string $laravelMigrationsPath;
+
+    private string $sqlMigrationsPath;
+
     public function __construct(
         MigrationRepositoryInterface $repository,
         ConnectionResolverInterface $resolver,
         Filesystem $files,
         Dispatcher $dispatcher,
-        private readonly string $outputMigrationName,
-        private readonly string $laravelMigrationsPath,
-        private readonly string $sqlMigrationsPath
+        string $laravelMigrationsPath,
+        string $sqlMigrationsPath
     ) {
         parent::__construct($repository, $resolver, $files, $dispatcher);
+        $this->laravelMigrationsPath = $laravelMigrationsPath;
+        $this->sqlMigrationsPath = $sqlMigrationsPath;
     }
 
     /**
@@ -47,11 +54,30 @@ class ExportMigrationService extends Migrator
             return;
         }
 
+        if (empty($this->outputMigrationName)) {
+            $this->write(Error::class, "The outputMigrationName should be set as a command line argument.");
+            return;
+        }
         $this->writeMigrationsFile($this->outputMigrationName, $queries);
 
         if (!empty($files)) {
             $this->updateCurrentMigrationFile(end($files));
         }
+    }
+
+    public function setOutputMigrationName(string $outputMigrationName): void
+    {
+        $this->outputMigrationName = $outputMigrationName;
+    }
+
+    public function setLaravelMigrationsPath(string $laravelMigrationsPath): void
+    {
+        $this->laravelMigrationsPath = $laravelMigrationsPath;
+    }
+
+    public function setSqlMigrationsPath(string $sqlMigrationsPath): void
+    {
+        $this->sqlMigrationsPath = $sqlMigrationsPath;
     }
 
     /**
@@ -144,7 +170,7 @@ class ExportMigrationService extends Migrator
     protected function writeMigrationsFile(string $outputFileName, array $queries): void
     {
         $dateString = Carbon::now()->format('Y_m_d_His');
-        $filePath = "{$this->sqlMigrationsPath}/{$dateString}_{$outputFileName}";
+        $filePath = "{$this->sqlMigrationsPath}/{$dateString}_{$outputFileName}.sql";
         if (!file_exists($this->sqlMigrationsPath)) {
             mkdir($this->sqlMigrationsPath, recursive: true);
         }
