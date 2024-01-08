@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return [
     /**
-     * The client ID of the OpenID Connect provider.
+     * This is the path to the Laravel migrations directory.
      */
     'laravel_migrations_path' => env('SQL_EXPORT_LARAVEL_MIGRATIONS_PATH', getcwd() . '/database/migrations'),
 
