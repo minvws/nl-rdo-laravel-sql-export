@@ -9,7 +9,6 @@ use MinVWS\SqlExporter\Services\ExportMigrationService;
 
 class SqlExporterServiceProvider extends ServiceProvider
 {
-
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/sql-export.php', 'sql-export');
