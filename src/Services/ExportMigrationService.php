@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MinVWS\SqlExporter\Services;
 
-use Carbon\Carbon;
 use Illuminate\Console\View\Components\Error;
 use Illuminate\Console\View\Components\Info;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -12,6 +11,7 @@ use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Migrations\MigrationRepositoryInterface;
 use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 
 class ExportMigrationService extends Migrator
@@ -172,7 +172,7 @@ class ExportMigrationService extends Migrator
      */
     protected function writeMigrationsFile(string $outputFileName, array $queries): void
     {
-        $dateString = Carbon::now()->format('Y_m_d_His');
+        $dateString = Date::now()->format('Y_m_d_His');
         $filePath = "{$this->sqlMigrationsPath}/{$dateString}_{$outputFileName}.sql";
         if (!file_exists($this->sqlMigrationsPath)) {
             mkdir($this->sqlMigrationsPath, recursive: true);
