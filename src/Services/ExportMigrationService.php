@@ -186,7 +186,7 @@ class ExportMigrationService extends Migrator
             throw new \Exception("Could not open file {$filePath}");
         }
         foreach ($queries as $query) {
-            fwrite($migrationFile, $query['raw_query'] . ";\n\n");
+            fwrite($migrationFile, rtrim($query['raw_query'], ';') . ";\n\n");
         }
         fclose($migrationFile);
 
