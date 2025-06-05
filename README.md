@@ -46,10 +46,30 @@ the `laravelMigrationsPath` or the `sqlMigrationsPath` arguments:
 ```
 
 ## Development
+
+To contribute to the development of this package, you can clone the repository and run the following command to install the dependencies:
+
+```bash
+composer install
+```
+
 A running PostgreSQL database is required to run the tests.
 To create the database run the following command:
 ```bash
 docker run --name laravel-sql-export-test-postgres -v "$(pwd)/tests/fixtures/init.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql" -e POSTGRES_PASSWORD=password -p 55322:5432 -d postgres || docker start laravel-sql-export-test-postgres ||  echo "Unable to start Postgres container, it may already be running"
+```
+
+To run the tests, you can use the following command:
+
+```bash
+vendor/bin/phpunit
+```
+
+To stop and remove the PostgreSQL container after running the tests, you can use:
+
+```bash
+docker stop laravel-sql-export-test-postgres
+docker rm laravel-sql-export-test-postgres
 ```
 
 ## Contributing
