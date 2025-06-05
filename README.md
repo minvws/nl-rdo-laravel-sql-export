@@ -21,9 +21,9 @@ Install the package through composer. Since this is currently a private package,
     }
 }
 ```
-You can install the package via composer:
+You can install the package via composer (as a `dev dependency`):
 ```bash
-composer require minvws/laravel-sql-exporter
+composer require --dev minvws/laravel-sql-exporter
 ```
 
 ## Usage
