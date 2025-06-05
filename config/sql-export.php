@@ -26,5 +26,6 @@ return [
         'insert into "migrations',
         'select * from "migrations"',
         'select exists (select 1 from pg_class c, pg_namespace n where n.nspname = \'public\' and c.relname = \'migrations\' and c.relkind in (\'r\', \'p\') and n.oid = c.relnamespace)',
+        'select exists (select 1 from pg_class c, pg_namespace n where n.nspname = current_schema() and c.relname = \'migrations\' and c.relkind in (\'r\', \'p\') and n.oid = c.relnamespace)',
     ]
 ];
