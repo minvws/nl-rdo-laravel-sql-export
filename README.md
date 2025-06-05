@@ -8,20 +8,7 @@ Before using the package, make sure you have the following requirements:
 - Composer
 
 ## Installation
-Install the package through composer. Since this is currently a private package, you must enable the repository in your 
-`composer.json` file:
-
-```json
-{
-    "repositories": {
-        "minvws/laravel-sql-exporter": {
-            "type": "vcs",
-            "url": "git@github.com:minvws/nl-rdo-laravel-sql-exporter"
-        }
-    }
-}
-```
-You can install the package via composer (as a `dev dependency`):
+Install the package via composer (as a **dev dependency**):
 ```bash
 composer require --dev minvws/laravel-sql-exporter
 ```
