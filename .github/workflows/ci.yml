@@ -24,12 +24,20 @@ jobs:
       fail-fast: false
       matrix:
         php: [ 8.1, 8.2, 8.3 ]
+        laravel: ['10.*', '11.*', '12.*']
         stability: [ prefer-stable ]
-        experimental: [ false ]
         include:
-          - php: 8.3
-            stability: prefer-stable
-            experimental: true
+          - laravel: 10.*
+            testbench: 8.*
+          - laravel: 11.*
+            testbench: 9.*
+          - laravel: 12.*
+            testbench: 10.*
+        exclude:
+          - laravel: 11.*
+            php: 8.1
+          - laravel: 12.*
+            php: 8.1
 
     name: PHP ${{ matrix.php }} - L${{ matrix.laravel }}
     steps:
@@ -42,14 +50,9 @@ jobs:
           php-version: ${{ matrix.php }}
 
       - name: Install dependencies
-        if: "${{ matrix.experimental == false }}"
         run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
-
-      - name: Install dependencies (experimental)
-        if: "${{ matrix.experimental == true }}"
-        run: |
-          composer update --${{ matrix.stability }} --prefer-dist --no-interaction --ignore-platform-reqs
 
       - name: Setup problem matchers for PHP
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
@@ -64,7 +67,6 @@ jobs:
         run: vendor/bin/phpstan analyse
 
       - name: Static analysis with Psalm
-        if: "${{ matrix.experimental == false }}"
         run: vendor/bin/psalm
 
       - name: Coding style PSR12 Check
