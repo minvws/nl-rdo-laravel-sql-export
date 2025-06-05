@@ -7,19 +7,12 @@ namespace MinVWS\SqlExporter\Tests\Feature;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Orchestra\Testbench\TestCase;
+use MinVWS\SqlExporter\Tests\TestCase;
 
 class SqlExportCommandTest extends TestCase
 {
-    /**
-     * @var string
-     */
-    private $laravelMigrationsPath;
-
-    /**
-     * @var string
-     */
-    private $sqlMigrationsPath;
+    private string $laravelMigrationsPath;
+    private string $sqlMigrationsPath;
 
     public function setUp(): void
     {
@@ -32,29 +25,6 @@ class SqlExportCommandTest extends TestCase
         mkdir($this->sqlMigrationsPath);
         DB::statement('DROP TABLE IF EXISTS "table";');
         DB::statement('DROP TABLE IF EXISTS "migrations";');
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-    }
-
-    protected function getPackageProviders($app)
-    {
-        return ['MinVWS\SqlExporter\SqlExporterServiceProvider'];
-    }
-
-    protected function getEnvironmentSetUp($app)
-    {
-        $app['config']->set('database.default', 'testbench');
-        $app['config']->set('database.connections.testbench', [
-            'driver'   => 'pgsql',
-            'host'     => env('DB_HOST', 'localhost'),
-            'port'     => env('DB_PORT', '55322'),
-            'database' => env('DB_DATABASE', 'db_test'),
-            'username' => env('DB_USERNAME', 'postgres'),
-            'password' => env('DB_PASSWORD', 'password'),
-        ]);
     }
 
     public function testSqlExportCommandWhenNoMigrationsRan()
