@@ -22,17 +22,27 @@ class ExportMigrationService extends Migrator
 
     private string $sqlMigrationsPath;
 
+    /**
+     * @var string[] $sqlExcludedQueries
+     */
+    private array $sqlExcludedQueries;
+
+    /**
+     * @param string[] $sqlExcludedQueries
+     */
     public function __construct(
         MigrationRepositoryInterface $repository,
         ConnectionResolverInterface $resolver,
         Filesystem $files,
         Dispatcher $dispatcher,
         string $laravelMigrationsPath,
-        string $sqlMigrationsPath
+        string $sqlMigrationsPath,
+        array $sqlExcludedQueries = [],
     ) {
         parent::__construct($repository, $resolver, $files, $dispatcher);
         $this->laravelMigrationsPath = $laravelMigrationsPath;
         $this->sqlMigrationsPath = $sqlMigrationsPath;
+        $this->sqlExcludedQueries = $sqlExcludedQueries;
     }
 
     /**
@@ -143,14 +153,7 @@ class ExportMigrationService extends Migrator
      */
     protected function filterOutMigrationQueries(array $queries): array
     {
-        $queriesToIgnore = [
-            'select * from information_schema.tables',
-            'select "migration" from "migrations"',
-            'select max("batch") as aggregate from "migrations"',
-            'create table "migrations" (',
-            'insert into "migrations',
-            'select * from "migrations"',
-        ];
+        $queriesToIgnore = $this->getQueriesToIgnore();
         return array_filter($queries, function ($query) use ($queriesToIgnore) {
             foreach ($queriesToIgnore as $queryToIgnore) {
                 if (str_starts_with($query['raw_query'], $queryToIgnore)) {
@@ -205,5 +208,15 @@ class ExportMigrationService extends Migrator
         }
         fwrite($currentMigrationFile, $latestMigrationFile);
         fclose($currentMigrationFile);
+    }
+
+    /**
+     * Get the queries that should be ignored during the export.
+     *
+     * @return string[]
+     */
+    public function getQueriesToIgnore(): array
+    {
+        return $this->sqlExcludedQueries;
     }
 }
