@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MinVWS\SqlExporter\Tests;
 
+use Illuminate\Support\Facades\Schema;
 use MinVWS\SqlExporter\SqlExporterServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -27,5 +28,10 @@ class TestCase extends Orchestra
             'username' => env('DB_USERNAME', 'postgres'),
             'password' => env('DB_PASSWORD', 'password'),
         ]);
+    }
+
+    protected function cleanupDbTables(): void
+    {
+        Schema::dropAllTables();
     }
 }
