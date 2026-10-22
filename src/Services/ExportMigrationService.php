@@ -118,6 +118,7 @@ class ExportMigrationService extends Migrator
             return;
         }
         foreach (array_reverse($files) as $file) {
+            /** @var array<int, object{migration: string}> $lastRunMigrations */
             $lastRunMigrations = $this->repository->getLast();
             $lastRunMigration = reset($lastRunMigrations);
             $migration = $this->resolvePath($this->laravelMigrationsPath . '/' . $file);
