@@ -3,8 +3,8 @@ This package is a slim package that allows you to export your Laravel database m
 
 ## Requirements
 Before using the package, make sure you have the following requirements:
-- PHP 8.1 or higher
-- Laravel 10 or higher
+- PHP 8.2 or higher
+- Laravel 12 or higher
 - Composer
 
 ## Installation
