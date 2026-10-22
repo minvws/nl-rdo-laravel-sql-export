@@ -22,6 +22,7 @@ return [
         'select * from information_schema.tables',
         'select "migration" from "migrations"',
         'select max("batch") as aggregate from "migrations"',
+        'select max("batch") as "aggregate" from "migrations"',
         'create table "migrations" (',
         'insert into "migrations',
         'select * from "migrations"',
